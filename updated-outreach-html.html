@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Littlearki Management – Outreach Templates</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif;margin:0;padding:20px;background:#f9f9f9;color:#333}
+h1{text-align:center;color:#007aff;margin-bottom:15px}
+.personalization{background:#fff;border-radius:12px;padding:15px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.personalization h2{margin-top:0;color:#007aff;font-size:18px;border-bottom:1px solid #eee;padding-bottom:10px}
+.form-group{margin-bottom:15px}
+label{display:block;margin-bottom:5px;font-weight:bold}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;font-size:16px;box-sizing:border-box}
+.price-inputs{display:flex;gap:10px}
+.price-inputs input{width:50%}
+.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.1);position:relative}
+.card h2{margin-top:0;color:#007aff;font-size:18px;border-bottom:1px solid #eee;padding-bottom:10px}
+/* Wichtig: white-space: pre-wrap erhält die Zeilenumbrüche aus dem Text */
+.text-preview{white-space:pre-wrap;font-size:16px;line-height:1.6;margin:0;padding:10px 0;max-height:200px; /* Etwas mehr Höhe für bessere Vorschau */ overflow:hidden;position:relative}
+.text-preview::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:40px;background:linear-gradient(transparent,#fff)}
+button{background:#007aff;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:16px;width:100%;margin-top:10px;font-weight:bold;-webkit-appearance:none;appearance:none;cursor:pointer;} /* Cursor hinzugefügt */
+button:active{background:#0062cc}
+.copy-btn{position:relative;overflow:hidden}
+.copy-btn::after{content:"Copy";position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#007aff;transition:transform .3s}
+.copy-btn.success::after{content:"Copied ✓";background:#34c759}
+.instructions{font-size:14px;color:#666;text-align:center;margin:20px 0;padding:15px;background:#f0f8ff;border-radius:8px;line-height:1.5}
+/* Wichtig: white-space: pre-wrap auch hier, damit der kopierte Text die Umbrüche behält */
+.hidden-text{position:absolute;top:-9999px;left:-9999px;opacity:0;height:0;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h1>Littlearki Management – Outreach Templates</h1>
+
+<div class="personalization">
+  <h2>Personalisiere deine Nachricht</h2>
+  <div class="form-group">
+    <label for="name-input">Influencer Name:</label>
+    <input type="text" id="name-input" placeholder="z.B. Chiara">
+  </div>
+  <div class="form-group">
+    <label>Preisspanne pro Video (€):</label>
+    <div class="price-inputs">
+      <input type="number" id="min-price" placeholder="Min z.B. 600" value="600">
+      <input type="number" id="max-price" placeholder="Max z.B. 1000" value="1000">
+    </div>
+  </div>
+  <button onclick="updateAll()">Alle Texte aktualisieren</button>
+</div>
+
+<div class="instructions"><p><strong>Hinweis:</strong> Name & Preisrange eingeben → aktualisieren → Text kopieren.</p></div>
+
+<!-- Vorlagen-Karten -->
+<div class="card"><h2>English (UK/Intl)</h2><div class="text-preview" id="prev1"></div><div id="full1" class="hidden-text"></div><button class="copy-btn" id="copy1" onclick="copyText('full1','copy1')">Copy</button></div>
+<div class="card"><h2>Italiano</h2><div class="text-preview" id="prev2"></div><div id="full2" class="hidden-text"></div><button class="copy-btn" id="copy2" onclick="copyText('full2','copy2')">Copy</button></div>
+<div class="card"><h2>Français</h2><div class="text-preview" id="prev3"></div><div id="full3" class="hidden-text"></div><button class="copy-btn" id="copy3" onclick="copyText('full3','copy3')">Copy</button></div>
+<div class="card"><h2>Español</h2><div class="text-preview" id="prev4"></div><div id="full4" class="hidden-text"></div><button class="copy-btn" id="copy4" onclick="copyText('full4','copy4')">Copy</button></div>
+<div class="card"><h2>Deutsch</h2><div class="text-preview" id="prev5"></div><div id="full5" class="hidden-text"></div><button class="copy-btn" id="copy5" onclick="copyText('full5','copy5')">Copy</button></div>
+
+<script>
+// Templates mit Backticks für bessere Formatierung und Lesbarkeit
+const templates = {
+en: `Hey {name}! ✨
+
+Your style and content perfectly match a fashion project we're currently working on!
+
+I'm Bleron from Littlearki Management. We're Hacoo's official partner agency and creators like @merveyano, @canelhevan and @almirra.az are already part of our fashion community.
+
+Quick opportunity:
+• Create 2 TikTok hauls to start (potentially 6 total)
+• €{minPrice}-{maxPrice} per video
+• Plus €350-400 in free clothes to keep
+• Your own discount code for followers
+
+Interested? Just a quick "yes" and I'll send details. No pressure either way!
+
+Bleron`,
+
+it: `Ciao {name}! ✨
+
+Il tuo stile e contenuto sono perfetti per un progetto a cui stiamo lavorando!
+
+Sono Bleron di Littlearki Management, partner ufficiale di Hacoo. Creator come @merveyano, @canelhevan e @almirra.az fanno già parte della nostra community fashion.
+
+Opportunità veloce da valutare:
+• 2 video haul TikTok iniziali (fino a 6 in totale)
+• €{minPrice}-{maxPrice} per video
+• €350-400 di abbigliamento gratuito da tenere
+• Codice sconto personalizzato
+
+Ti interessa? Anche solo un "sì" veloce e ti invio i dettagli!
+
+Bleron`,
+
+fr: `Salut {name}! ✨
+
+Ton style et ton contenu correspondent parfaitement à un projet sur lequel nous travaillons!
+
+Je suis Bleron de Littlearki Management, partenaire officiel de Hacoo. Des créatrices comme @merveyano, @canelhevan et @almirra.az font déjà partie de notre communauté mode.
+
+Une opportunité rapide:
+• 2 vidéos haul TikTok pour commencer (potentiellement 6)
+• €{minPrice}-{maxPrice} par vidéo
+• €350-400 de vêtements gratuits à garder
+• Code promo personnalisé
+
+Intéressée? Un simple "oui" suffit et je t'envoie les détails!
+
+Bleron`,
+
+es: `¡Hola {name}! ✨
+
+¡Tu estilo y contenido coinciden perfectamente con un proyecto en el que estamos trabajando!
+
+Soy Bleron de Littlearki Management, agencia oficial de Hacoo. Creadoras como @merveyano, @canelhevan y @almirra.az ya forman parte de nuestra comunidad de moda.
+
+Oportunidad rápida:
+• 2 videos haul de TikTok para empezar (hasta 6 en total)
+• €{minPrice}-{maxPrice} por video
+• €350-400 en ropa gratis para quedarte
+• Código de descuento personalizado
+
+¿Te interesa? Con un simple "sí" te envío los detalles. ¡Sin presión!
+
+Bleron`,
+
+de: `Hey {name}! ✨
+
+Dein Content und Style passen super zu einem Projekt, an dem wir gerade arbeiten!
+
+Ich bin Bleron von Littlearki Management, offizielle Partneragentur von Hacoo. Creators wie @merveyano, @canelhevan und @almirra.az sind bereits Teil unserer Fashion-Community.
+
+Kurz & knapp:
+• Starte mit 2 TikTok-Hauls (bis zu 6 möglich)
+• {minPrice}-{maxPrice}€ pro Video
+• 350-400€ Kleidung zum Behalten
+• Persönlicher Rabattcode für deine Community
+
+Interesse? Ein kurzes "ja" genügt und ich schicke dir alle Infos. Kein Druck!
+
+Bleron`
+};
+
+function updateAll() {
+ const name = document.getElementById('name-input').value || '[NAME]';
+ const min = parseInt(document.getElementById('min-price').value) || 600;
+ const max = parseInt(document.getElementById('max-price').value) || 1000;
+ const tMin = min * 6;
+ const tMax = max * 6;
+
+ // Funktion zum Ersetzen der Platzhalter
+ const fill = t => t.replace(/\{name\}/g, name)
+                   .replace(/\{minPrice\}/g, min)
+                   .replace(/\{maxPrice\}/g, max)
+                   .replace(/\{totalMin\}/g, tMin)
+                   .replace(/\{totalMax\}/g, tMax);
+
+ // Templates aktualisieren
+ const arr = [
+   fill(templates.en),
+   fill(templates.it),
+   fill(templates.fr),
+   fill(templates.es),
+   fill(templates.de)
+ ];
+
+ arr.forEach((txt, i) => {
+   document.getElementById('prev' + (i + 1)).textContent = txt;
+   document.getElementById('full' + (i + 1)).textContent = txt;
+ });
+}
+
+// Beim Laden der Seite die Texte initial generieren
+document.addEventListener('DOMContentLoaded', updateAll);
+
+function copyText(elementId, buttonId) {
+ const textToCopy = document.getElementById(elementId).textContent;
+ const button = document.getElementById(buttonId);
+
+ // Moderne Clipboard API verwenden (behält Formatierung besser bei)
+ if (navigator.clipboard && navigator.clipboard.writeText) {
+   navigator.clipboard.writeText(textToCopy).then(() => {
+     flash(button); // Erfolgs-Feedback
+   }).catch(err => {
+     console.error('Async: Could not copy text: ', err);
+     fallbackCopyTextToClipboard(textToCopy, button); // Fallback versuchen
+   });
+ } else {
+   // Fallback für ältere Browser
+   fallbackCopyTextToClipboard(textToCopy, button);
+ }
+}
+
+function fallbackCopyTextToClipboard(text, button) {
+ const textArea = document.createElement('textarea');
+ textArea.value = text;
+
+ // Styling, um das Element unsichtbar und aus dem Layout zu halten
+ textArea.style.position = 'fixed';
+ textArea.style.top = '-9999px';
+ textArea.style.left = '-9999px';
+ textArea.style.opacity = '0';
+
+ document.body.appendChild(textArea);
+ textArea.focus();
+ textArea.select();
+
+ try {
+   const successful = document.execCommand('copy');
+   if (successful) {
+     flash(button); // Erfolgs-Feedback
+   } else {
+     console.error('Fallback: Oops, unable to copy');
+     alert('Konnte Text nicht kopieren. Bitte manuell auswählen und kopieren.');
+   }
+ } catch (err) {
+   console.error('Fallback: Oops, unable to copy', err);
+   alert('Konnte Text nicht kopieren. Bitte manuell auswählen und kopieren.');
+ }
+
+ document.body.removeChild(textArea);
+}
+
+function flash(buttonElement) {
+ buttonElement.classList.add('success');
+ setTimeout(() => {
+   buttonElement.classList.remove('success');
+ }, 2000); // Feedback für 2 Sekunden anzeigen
+}
+</script>
+</body>
+</html>
