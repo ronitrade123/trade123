@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Littlearki Management Textvorlagen</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #007aff;
+            margin-bottom: 15px;
+        }
+        .personalization {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .personalization h2 {
+            margin-top: 0;
+            color: #007aff;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        .price-inputs input {
+            width: 50%;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #007aff;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .text-preview {
+            white-space: pre-wrap;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+            padding: 10px 0;
+            max-height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+        .text-preview::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(transparent, white);
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        button:active {
+            background-color: #0062cc;
+        }
+        .copy-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .copy-btn::after {
+            content: "Kopieren";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #007aff;
+            transition: transform 0.3s;
+        }
+        .copy-btn.success::after {
+            content: "Kopiert! ✓";
+            background-color: #34c759;
+            transform: translateY(0);
+        }
+        .instructions {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+        .hidden-text {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            opacity: 0;
+            height: 0;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Littlearki Management</h1>
+    
+    <div class="personalization">
+        <h2>Deine Nachricht personalisieren</h2>
+        <div class="form-group">
+            <label for="name-input">Name des Influencers:</label>
+            <input type="text" id="name-input" placeholder="z.B. Aylin, Luna..." value="">
+        </div>
+        <div class="form-group">
+            <label>Preisspanne pro Video (€):</label>
+            <div class="price-inputs">
+                <input type="number" id="min-price" placeholder="Min, z.B. 600" value="600">
+                <input type="number" id="max-price" placeholder="Max, z.B. 1000" value="1000">
+            </div>
+        </div>
+        <button onclick="updateAllTexts()">Alle Texte aktualisieren</button>
+    </div>
+    
+    <div class="instructions">
+        <p><strong>Hinweis:</strong> Gib einen Namen und die Preisspanne ein, dann aktualisiere alle Texte. Die Gesamtpreise für 6 Videos werden automatisch berechnet. Tippe danach einfach auf einen der Kopieren-Buttons.</p>
+    </div>
+    
+    <div class="card">
+        <h2>Deutsch: Hacoo Collab bestehend</h2>
+        <div class="text-preview" id="preview1"></div>
+        <div id="full-text1" class="hidden-text"></div>
+        <button class="copy-btn" id="btn1" onclick="copyToClipboard('full-text1', 'btn1')">Kopieren</button>
+    </div>
+    
+    <div class="card">
+        <h2>Deutsch: Neue Collab mit Hacoo anbieten</h2>
+        <div class="text-preview" id="preview2"></div>
+        <div id="full-text2" class="hidden-text"></div>
+        <button class="copy-btn" id="btn2" onclick="copyToClipboard('full-text2', 'btn2')">Kopieren</button>
+    </div>
+    
+    <div class="card">
+        <h2>Englisch: Neue Collab mit Hacoo anbieten</h2>
+        <div class="text-preview" id="preview3"></div>
+        <div id="full-text3" class="hidden-text"></div>
+        <button class="copy-btn" id="btn3" onclick="copyToClipboard('full-text3', 'btn3')">Kopieren</button>
+    </div>
+    
+    <div class="card">
+        <h2>Englisch: Collab verbessern Hacoo</h2>
+        <div class="text-preview" id="preview4"></div>
+        <div id="full-text4" class="hidden-text"></div>
+        <button class="copy-btn" id="btn4" onclick="copyToClipboard('full-text4', 'btn4')">Kopieren</button>
+    </div>
+    
+    <script>
+        // Templates für die verschiedenen Texte
+        const textTemplates = {
+            text1: `Hey {name},
+
+nur eine kurze Frage zu deiner Hacoo-Kollaboration.
+
+Wärst du interessiert an einer neuen längerfristigen Collaboration?
+Es wären ca. 6 Videos in den nächsten 3 Monaten für ca. {totalMin}-{totalMax}€ insgesamt.
+
+Ich habe das Gleiche für @merveyano, @aylinveyron und @canelhevan gemacht.
+
+Lass mich wissen, ob du Interesse hast oder falls du Fragen hast :)
+
+Liebe Grüße
+Bleron`,
+            
+            text2: `Hey {name},
+
+wärst du interessiert an einer Collaboration mit Hacoo?
+
+Du könntest dir Klamotten bis zu 350€ aussuchen und würdest noch zusätzlich Gage von ca. {minPrice}-{maxPrice}€ pro TikTok Video bekommen.
+
+Im optimal Fall würde dann eine 3 Monats collab entstehen wo du mit 6 Videos über {totalMin}-{totalMax}€ verdienen würdest.
+
+Ich habe das Gleiche für @merveyano, @aylinveyron und @canelhevan gemacht.
+
+Lass mich wissen, ob du Interesse hast oder falls du Fragen hast :)
+
+Liebe Grüße
+Bleron`,
+            
+            text3: `Hey {name},
+
+Would you be interested in a longer-term collaboration with Hacoo?
+
+It would be approximately 6 TikTok videos over the next 3 months for about {totalMin}€ - {totalMax}€ in total.
+
+I've done the same for @merveyano, @aylinveyron, @melisa.agc and @canelhevan.
+
+Let me know if you're interested or if you have any questions :)
+
+Best regards,
+Bleron`,
+            
+            text4: `Hey {name},
+
+just a quick question for your Hacoo collab.
+
+How much do they pay you?
+
+Because if you get under 1500$ per video let me know, I'll negotiate a new deal for you.
+
+
+I have done the same for @merveyano and @canelhevan
+
+Let me know your thoughts:)
+
+Best regards
+Bleron`
+        };
+        
+        // Beim Laden der Seite einmal alle Texte aktualisieren
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAllTexts();
+        });
+        
+        // Funktion zum Aktualisieren aller Texte
+        function updateAllTexts() {
+            const name = document.getElementById('name-input').value || '[NAME]';
+            const minPrice = parseInt(document.getElementById('min-price').value) || 600;
+            const maxPrice = parseInt(document.getElementById('max-price').value) || 1000;
+            
+            // Gesamtpreise für 6 Videos berechnen
+            const totalMin = minPrice * 6;
+            const totalMax = maxPrice * 6;
+            
+            // Für jeden Text-Template
+            for (let i = 1; i <= 4; i++) {
+                const templateKey = 'text' + i;
+                
+                // Template mit den aktuellen Werten füllen
+                let filledText = textTemplates[templateKey]
+                    .replace(/{name}/g, name)
+                    .replace(/{minPrice}/g, minPrice)
+                    .replace(/{maxPrice}/g, maxPrice)
+                    .replace(/{totalMin}/g, totalMin)
+                    .replace(/{totalMax}/g, totalMax);
+                
+                // Text in die Vorschau und verstecktes Feld einfügen
+                document.getElementById('preview' + i).textContent = filledText;
+                document.getElementById('full-text' + i).textContent = filledText;
+            }
+        }
+        
+        // Diese Funktion kopiert Text in die Zwischenablage
+        function copyToClipboard(textId, buttonId) {
+            // Den Text mit Zeilenumbrüchen aus dem Element holen
+            const textElement = document.getElementById(textId);
+            // Wir verwenden textContent statt innerText, um die Formatierung besser zu erhalten
+            let text = textElement.textContent;
+            
+            // Sicherstellen, dass Zeilenumbrüche korrekt erhalten bleiben
+            // (manchmal werden \n in der Zwischenablage nicht richtig interpretiert)
+            text = text.replace(/\n/g, '\r\n');
+            
+            const button = document.getElementById(buttonId);
+            
+            // Moderne Methode mit Clipboard API
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(
+                    function() {
+                        showSuccess(button);
+                    }, 
+                    function() {
+                        // Fallback für Safari
+                        legacyCopy(text, button);
+                    }
+                );
+            } else {
+                // Ältere Methode für Browser ohne Clipboard API
+                legacyCopy(text, button);
+            }
+        }
+        
+        // Fallback für ältere Browser oder iOS Safari
+        function legacyCopy(text, button) {
+            // Text in ein temporäres Textarea-Element einfügen
+            // Bei Textarea-Elementen bleiben Zeilenumbrüche erhalten
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            // Styling für die temporäre Textarea
+            textarea.style.position = 'fixed';
+            textarea.style.top = '0';
+            textarea.style.left = '0';
+            textarea.style.opacity = '0';
+            textarea.style.width = '1px';
+            textarea.style.height = '1px';
+            textarea.style.padding = '0';
+            
+            document.body.appendChild(textarea);
+            // Bei iOS wichtig: Warte kurz, bevor du selektierst
+            setTimeout(function() {
+                textarea.focus();
+                textarea.select();
+                
+                try {
+                    // Kopieren mit Dokument-Befehl versuchen
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showSuccess(button);
+                    }
+                } catch (err) {
+                    console.error('Konnte Text nicht kopieren:', err);
+                }
+                
+                document.body.removeChild(textarea);
+            }, 50);
+        }
+        
+        // Visuelles Feedback anzeigen, wenn das Kopieren erfolgreich war
+        function showSuccess(button) {
+            button.classList.add('success');
+            
+            setTimeout(function() {
+                button.classList.remove('success');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
