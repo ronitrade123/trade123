@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Littlearki Management – TikTok Tools</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Outreach Tool Styles */
+    .personalization {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.1);
+    }
+    .personalization h2 {
+      margin-top: 0;
+      color: #007aff;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .outreach-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .outreach-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .price-inputs {
+      display: flex;
+      gap: 10px;
+    }
+    .price-inputs input {
+      width: 50%;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.1);
+      position: relative;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #007aff;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .text-preview {
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
+      padding: 10px 0;
+      max-height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .text-preview::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(transparent,#fff);
+    }
+    .outreach-btn {
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 10px;
+      font-weight: bold;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    .outreach-btn:active {
+      background: #0062cc;
+    }
+    .copy-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .copy-btn::after {
+      content: "Copy";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #007aff;
+      transition: transform .3s;
+    }
+    .copy-btn.success::after {
+      content: "Copied ✓";
+      background: #34c759;
+    }
+    .instructions {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      margin: 20px 0;
+      padding: 15px;
+      background: #f0f8ff;
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .hidden-text {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      opacity: 0;
+      height: 0;
+      white-space: pre-wrap;
+    }
+    .section-divider {
+      border-top: 1px solid #eee;
+      margin: 40px 0;
+    }
+    .section-title {
+      text-align: center;
+      color: #007aff;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-10">Littlearki Management – TikTok Tools</h1>
+    
+    <!-- TikTok Calculator Section -->
+    <section>
+      <h2 class="section-title">TikTok Preisrechner</h2>
+      <div id="calculator-root"></div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Outreach Templates Section -->
+    <section>
+      <h2 class="section-title">Outreach Templates</h2>
+      
+      <div class="personalization">
+        <h2>Personalisiere deine Nachricht</h2>
+        <div class="form-group">
+          <label class="outreach-label" for="name-input">Influencer Name:</label>
+          <input type="text" id="name-input" class="outreach-input" placeholder="z.B. Chiara">
+        </div>
+        <div class="form-group">
+          <label class="outreach-label">Preisspanne pro Video (€):</label>
+          <div class="price-inputs">
+            <input type="number" id="min-price" class="outreach-input" placeholder="Min z.B. 600" value="600">
+            <input type="number" id="max-price" class="outreach-input" placeholder="Max z.B. 1000" value="1000">
+          </div>
+        </div>
+        <button class="outreach-btn" onclick="updateAll()">Alle Texte aktualisieren</button>
+      </div>
+      
+      <div class="instructions"><p><strong>Hinweis:</strong> Name & Preisrange eingeben → aktualisieren → Text kopieren.</p></div>
+      
+      <!-- Templates Cards -->
+      <div class="card"><h2>English (UK/Intl)</h2><div class="text-preview" id="prev1"></div><div id="full1" class="hidden-text"></div><button class="copy-btn outreach-btn" id="copy1" onclick="copyText('full1','copy1')">Copy</button></div>
+      <div class="card"><h2>Italiano</h2><div class="text-preview" id="prev2"></div><div id="full2" class="hidden-text"></div><button class="copy-btn outreach-btn" id="copy2" onclick="copyText('full2','copy2')">Copy</button></div>
+      <div class="card"><h2>Français</h2><div class="text-preview" id="prev3"></div><div id="full3" class="hidden-text"></div><button class="copy-btn outreach-btn" id="copy3" onclick="copyText('full3','copy3')">Copy</button></div>
+      <div class="card"><h2>Español</h2><div class="text-preview" id="prev4"></div><div id="full4" class="hidden-text"></div><button class="copy-btn outreach-btn" id="copy4" onclick="copyText('full4','copy4')">Copy</button></div>
+      <div class="card"><h2>Deutsch</h2><div class="text-preview" id="prev5"></div><div id="full5" class="hidden-text"></div><button class="copy-btn outreach-btn" id="copy5" onclick="copyText('full5','copy5')">Copy</button></div>
+    </section>
+  </div>
+
+  <!-- React & React-DOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Calculator Component -->
+  <script type="text/babel">
+    function TikTokPricingCalculator() {
+      const [followers, setFollowers] = React.useState("");
+      const [avgViews, setAvgViews] = React.useState("");
+      const [videos, setVideos] = React.useState(1);
+      const [result, setResult] = React.useState(null);
+
+      const up50 = (x) => Math.ceil(x / 50) * 50;
+
+      const calculate = () => {
+        const followersNum = Number(followers);
+        const viewsNum     = Number(avgViews || 0);
+        const videosNum    = Number(videos || 1);
+
+        const tiers  = [100,200,300,400,500,600,700,800,900,1000];
+        const lows   = [350,450,500,500,700,850,950,1200,1600,2200];
+        const highs  = [600,750,900,900,1100,1250,1400,1700,2000,3000];
+
+        const idx = Math.min(Math.floor(followersNum / 100000), tiers.length - 1);
+
+        let low    = lows[idx];
+        let high   = highs[idx];
+        let center = (low + high) / 2;
+
+        let factor = 1.0;
+        if (viewsNum < 25000)       factor = 0.8;
+        else if (viewsNum > 100000) factor = 1.3;
+        else if (viewsNum > 60000)  factor = 1.1;
+
+        low    = up50(low    * factor * videosNum);
+        center = up50(center * factor * videosNum);
+        high   = up50(high   * factor * videosNum);
+
+        setResult({ low, center, high });
+        
+        // Optional: Auto-fill the outreach template prices
+        if (document.getElementById('min-price') && document.getElementById('max-price')) {
+          document.getElementById('min-price').value = low;
+          document.getElementById('max-price').value = high;
+          // Update templates with new prices
+          updateAll();
+        }
+      };
+
+      return (
+        <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6">
+          <div className="space-y-4">
+            <label className="block">
+              <span className="text-gray-700">Follower</span>
+              <input
+                type="number"
+                value={followers}
+                onChange={(e) => setFollowers(e.target.value)}
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 border"
+                placeholder="z.B. 457000"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-gray-700">Ø Views (letzte 10 Videos)</span>
+              <input
+                type="number"
+                value={avgViews}
+                onChange={(e) => setAvgViews(e.target.value)}
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 border"
+                placeholder="z.B. 68000"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-gray-700">Anzahl Videos (Paketgröße)</span>
+              <input
+                type="number"
+                min="1"
+                value={videos}
+                onChange={(e) => setVideos(e.target.value)}
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 border"
+                placeholder="1"
+              />
+            </label>
+
+            <button
+              onClick={calculate}
+              className="w-full py-2 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition"
+            >
+              Berechnen
+            </button>
+          </div>
+
+          {result && (
+            <div className="grid grid-cols-3 gap-4 text-center mt-4">
+              <div className="p-4 rounded-xl bg-gray-100">
+                <p className="text-sm text-gray-500">Niedrig</p>
+                <p className="text-xl font-bold">€{result.low}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-gray-100">
+                <p className="text-sm text-gray-500">Mittel</p>
+                <p className="text-xl font-bold">€{result.center}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-gray-100">
+                <p className="text-sm text-gray-500">Hoch</p>
+                <p className="text-xl font-bold">€{result.high}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const calculatorRoot = ReactDOM.createRoot(document.getElementById("calculator-root"));
+    calculatorRoot.render(<TikTokPricingCalculator />);
+  </script>
+  
+  <!-- Outreach Templates Script -->
+  <script>
+    // Templates mit Backticks für bessere Formatierung und Lesbarkeit
+    const templates = {
+      en: `Hey {name}! ✨
+
+Your style and content perfectly match a fashion project we're currently working on!
+
+I'm Bleron from Littlearki Management. We're Hacoo's official partner agency and creators like @merveyano, @canelhevan and @almirra.az are already part of our fashion community.
+
+Quick opportunity:
+• Create 2 TikTok hauls to start (potentially 6 total)
+• €{minPrice}-{maxPrice} per video
+• Plus €350-400 in free clothes to keep
+• Your own discount code for followers
+
+Interested? Just a quick "yes" and I'll send details. No pressure either way!
+
+Bleron`,
+
+      it: `Ciao {name}! ✨
+
+Il tuo stile e contenuto sono perfetti per un progetto a cui stiamo lavorando!
+
+Sono Bleron di Littlearki Management, partner ufficiale di Hacoo. Creator come @merveyano, @canelhevan e @almirra.az fanno già parte della nostra community fashion.
+
+Opportunità veloce da valutare:
+• 2 video haul TikTok iniziali (fino a 6 in totale)
+• €{minPrice}-{maxPrice} per video
+• €350-400 di abbigliamento gratuito da tenere
+• Codice sconto personalizzato
+
+Ti interessa? Anche solo un "sì" veloce e ti invio i dettagli!
+
+Bleron`,
+
+      fr: `Salut {name}! ✨
+
+Ton style et ton contenu correspondent parfaitement à un projet sur lequel nous travaillons!
+
+Je suis Bleron de Littlearki Management, partenaire officiel de Hacoo. Des créatrices comme @merveyano, @canelhevan et @almirra.az font déjà partie de notre communauté mode.
+
+Une opportunité rapide:
+• 2 vidéos haul TikTok pour commencer (potentiellement 6)
+• €{minPrice}-{maxPrice} par vidéo
+• €350-400 de vêtements gratuits à garder
+• Code promo personnalisé
+
+Intéressée? Un simple "oui" suffit et je t'envoie les détails!
+
+Bleron`,
+
+      es: `¡Hola {name}! ✨
+
+¡Tu estilo y contenido coinciden perfectamente con un proyecto en el que estamos trabajando!
+
+Soy Bleron de Littlearki Management, agencia oficial de Hacoo. Creadoras como @merveyano, @canelhevan y @almirra.az ya forman parte de nuestra comunidad de moda.
+
+Oportunidad rápida:
+• 2 videos haul de TikTok para empezar (hasta 6 en total)
+• €{minPrice}-{maxPrice} por video
+• €350-400 en ropa gratis para quedarte
+• Código de descuento personalizado
+
+¿Te interesa? Con un simple "sí" te envío los detalles. ¡Sin presión!
+
+Bleron`,
+
+      de: `Hey {name}! ✨
+
+Dein Content und Style passen super zu einem Projekt, an dem wir gerade arbeiten!
+
+Ich bin Bleron von Littlearki Management, offizielle Partneragentur von Hacoo. Creators wie @merveyano, @canelhevan und @almirra.az sind bereits Teil unserer Fashion-Community.
+
+Kurz & knapp:
+• Starte mit 2 TikTok-Hauls (bis zu 6 möglich)
+• {minPrice}-{maxPrice}€ pro Video
+• 350-400€ Kleidung zum Behalten
+• Persönlicher Rabattcode für deine Community
+
+Interesse? Ein kurzes "ja" genügt und ich schicke dir alle Infos. Kein Druck!
+
+Bleron`
+    };
+
+    function updateAll() {
+      const name = document.getElementById('name-input').value || '[NAME]';
+      const min = parseInt(document.getElementById('min-price').value) || 600;
+      const max = parseInt(document.getElementById('max-price').value) || 1000;
+      const tMin = min * 6;
+      const tMax = max * 6;
+
+      // Funktion zum Ersetzen der Platzhalter
+      const fill = t => t.replace(/\{name\}/g, name)
+                        .replace(/\{minPrice\}/g, min)
+                        .replace(/\{maxPrice\}/g, max)
+                        .replace(/\{totalMin\}/g, tMin)
+                        .replace(/\{totalMax\}/g, tMax);
+
+      // Templates aktualisieren
+      const arr = [
+        fill(templates.en),
+        fill(templates.it),
+        fill(templates.fr),
+        fill(templates.es),
+        fill(templates.de)
+      ];
+
+      arr.forEach((txt, i) => {
+        document.getElementById('prev' + (i + 1)).textContent = txt;
+        document.getElementById('full' + (i + 1)).textContent = txt;
+      });
+    }
+
+    // Beim Laden der Seite die Texte initial generieren
+    document.addEventListener('DOMContentLoaded', updateAll);
+
+    function copyText(elementId, buttonId) {
+      const textToCopy = document.getElementById(elementId).textContent;
+      const button = document.getElementById(buttonId);
+
+      // Moderne Clipboard API verwenden (behält Formatierung besser bei)
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          flash(button); // Erfolgs-Feedback
+        }).catch(err => {
+          console.error('Async: Could not copy text: ', err);
+          fallbackCopyTextToClipboard(textToCopy, button); // Fallback versuchen
+        });
+      } else {
+        // Fallback für ältere Browser
+        fallbackCopyTextToClipboard(textToCopy, button);
+      }
+    }
+
+    function fallbackCopyTextToClipboard(text, button) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+
+      // Styling, um das Element unsichtbar und aus dem Layout zu halten
+      textArea.style.position = 'fixed';
+      textArea.style.top = '-9999px';
+      textArea.style.left = '-9999px';
+      textArea.style.opacity = '0';
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          flash(button); // Erfolgs-Feedback
+        } else {
+          console.error('Fallback: Oops, unable to copy');
+          alert('Konnte Text nicht kopieren. Bitte manuell auswählen und kopieren.');
+        }
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+        alert('Konnte Text nicht kopieren. Bitte manuell auswählen und kopieren.');
+      }
+
+      document.body.removeChild(textArea);
+    }
+
+    function flash(buttonElement) {
+      buttonElement.classList.add('success');
+      setTimeout(() => {
+        buttonElement.classList.remove('success');
+      }, 2000); // Feedback für 2 Sekunden anzeigen
+    }
+  </script>
+</body>
+</html>
